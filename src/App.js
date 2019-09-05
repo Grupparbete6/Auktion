@@ -11,24 +11,22 @@ import CreateAuction from './components/CreateAuction';
 export default class App extends React.Component {
   state = {
     AuctionInfo: [],
+    // Används inte just nu, men bör finnas med så vi vet när data har hämtats
+    IsLoaded = false,
     CurrentUser: ''
   }
 
-  fetchApi = () => {
+  componentDidMount() {
     fetch('http://nackowskis.azurewebsites.net/api/auktion/2150')
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (myJson) {
-      const myData = JSON.stringify(myJson);
-
-      console.log(myData)
-
-      
-
-      console.log("I'm succesful!");
-    });
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          AuctionInfo: json,
+        })
+      })
   }
+
+
 
   // stateSet = (data) => {
   //   this.setState = ({
@@ -53,12 +51,12 @@ export default class App extends React.Component {
 
   // getAuctions()
   // GET
+
+
   render() {
-
-    this.fetchApi()
-
+    console.log(this.state.AuctionInfo)
     return (
-    <div className="App">
+      <div className="App" >
         <div className="container">
           <Header />
           <Login />
