@@ -1,29 +1,37 @@
 import React from 'react';
-
 import './App.css';
+import Navigation from "./components/Navigation";
+import Home from './components/Home';
 import Header from './components/layout/Header';
 import Search from './components/Search';
-import AuctionList from './components/AuctionList';
 import Login from './components/Login';
 import AuctionDetails from './components/AuctionDetails';
 import CreateAuction from './components/CreateAuction';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 export default class App extends React.Component {
-  state = {
-    AuctionInfo: [],
-    // Används inte just nu, men bör finnas med så vi vet när data har hämtats
-    IsLoaded = false,
-    CurrentUser: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      AuctionInfo: [],
+      IsLoaded: false,
+      CurrentUser: ''
+    }
+  }
+
+  getData = async () => {
+    const url = 'http://nackowskis.azurewebsites.net/api/auktion/2150';
+    const response = await fetch(url)
+      .then(result => result.json());
+    this.setState({
+      AuctionInfo: response,
+      IsLoaded: true
+    })
+    console.log(this.state.AuctionInfo)
   }
 
   componentDidMount() {
-    fetch('http://nackowskis.azurewebsites.net/api/auktion/2150')
-      .then(res => res.json())
-      .then(json => {
-        this.setState({
-          AuctionInfo: json,
-        })
-      })
+    this.getData();
   }
 
 
@@ -54,14 +62,17 @@ export default class App extends React.Component {
 
 
   render() {
-    console.log(this.state.AuctionInfo)
     return (
       <div className="App" >
         <div className="container">
+          <Router>
+            <Navigation />
+            <Route exact path="/" render={(props) => <Home {...props} auctions={this.state.AuctionInfo} />} />
+          </Router>
+
           <Header />
           <Login />
           <Search />
-          <AuctionList />
           <CreateAuction />
           <AuctionDetails />
         </div>
