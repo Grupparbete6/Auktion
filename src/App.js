@@ -1,13 +1,13 @@
 import React from 'react';
-import './App.css';
 import Navigation from "./components/Navigation";
-import Home from './components/Home';
-import Header from './components/layout/Header';
-import Search from './components/Search';
-import Login from './components/Login';
-import AuctionDetails from './components/AuctionDetails';
-import CreateAuction from './components/CreateAuction';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import AuctionTable from './components/AuctionTable';
+import Details from "./components/Details";
+import Create from "./components/Create";
+import NewAuction from './components/NewAuction';
+import Bid from './components/Bid';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Button } from "react-bootstrap";
+import './App.css';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -15,68 +15,88 @@ export default class App extends React.Component {
     this.state = {
       AuctionInfo: [],
       IsLoaded: false,
-      CurrentUser: ''
+      CurrentUser: 'Tom',
+      testAuction: undefined
     }
   }
 
+  // Async funktion som hämtar data från api till AuctionInfo state
   getData = async () => {
     const url = 'http://nackowskis.azurewebsites.net/api/auktion/2150';
-    const response = await fetch(url)
-      .then(result => result.json());
-    this.setState({
-      AuctionInfo: response,
-      IsLoaded: true
-    })
+    await fetch(url)
+      .then(response => response.json())
+      .then(result => 
+        this.setState({
+          AuctionInfo: result,
+          IsLoaded: true
+        })
+      );
     console.log(this.state.AuctionInfo)
+  }
+
+  postData = (e) => {
+    e.preventDefault();
+
+    // Hantera felaktig inmatning (validering)
+
+    const url = 'http://nackowskis.azurewebsites.net/api/Auktion/2150';
+    const auktionData = {
+      "Titel": e.target.titel.value, 
+      "Beskrivning": e.target.description.value, 
+      "StartDatum": e.target.start_date.value, 
+      "SlutDatum": e.target.end_date.value, 
+      "Gruppkod": "2150", 
+      "Utropspris": e.target.start_bid.value, 
+      "SkapadAv": e.target.created_by.value
+    };
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(auktionData),
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }
+    }).then((data) => {
+      console.log('Request success:');
+    })
   }
 
   componentDidMount() {
     this.getData();
   }
 
+  // Sök callback funktion som hanterar sökning
+  onSearch = (e) => {
+    e.preventDefault();
+    const searchValue = e.target.search.value;
 
+    let newData = this.state.AuctionInfo.filter(x => {
+      return x.Titel.toLowerCase().includes(searchValue.toLowerCase());
+    });
 
-  // stateSet = (data) => {
-  //   this.setState = ({
-  //     AuctionInfo: data
-  //   })
-  // }
-
-  // FUNCTIONS
-
-  // componentDidMount()
-  // GET from API
-  // this.setState({ todos: res.data })
-
-  // placeBid()
-  // PUT
-
-  // updateAuction()
-  // PUT
-
-  // createAuction()
-  // POST
-
-  // getAuctions()
-  // GET
-
+    this.setState({
+      testAuction: newData
+    });
+  }
 
   render() {
+    //console.log(this.onSearch);
+    const searchValue = this.state.testAuction !== undefined ? (
+      <Route exact path="/" render={(props) => <AuctionTable {...props} auctions={this.state.testAuction} />} />
+    ) :
+      (
+        <Route exact path="/" render={(props) => <AuctionTable {...props} auctions={this.state.AuctionInfo} />} />
+      )
     return (
-      <div className="App" >
-        <div className="container">
-          <Router>
-            <Navigation />
-            <Route exact path="/" render={(props) => <Home {...props} auctions={this.state.AuctionInfo} />} />
-          </Router>
-
-          <Header />
-          <Login />
-          <Search />
-          <CreateAuction />
-          <AuctionDetails />
+      <Router>
+        <div className="App" >
+          <Navigation onSearch={this.onSearch} />
+          <NewAuction postData={this.postData}/>
+          {searchValue}
+          <Route path="/:bid_id" component={Bid}></Route>
         </div>
-      </div>
+      </Router>
     );
   }
 }

@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {Navbar, Nav, Form, Button, FormControl} from 'react-bootstrap'
 
-export default function Navigation() {
+export default function Navigation(props) {
     return (
         <div>
             <Navbar bg="dark" variant="dark">
@@ -10,9 +10,9 @@ export default function Navigation() {
                     <Nav.Link href="/">Home</Nav.Link>
                     <Nav.Link href="/skapa">Skapa bud</Nav.Link>
                 </Nav>
-                <Form inline>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-info">Search</Button>
+                <Form inline onSubmit={props.onSearch}>
+                    <FormControl type="text" placeholder="Search" className="mr-sm-2" name="search"/>
+                    <Button variant="outline-info" type="submit">Search</Button>
                 </Form>
             </Navbar>
         </div>
