@@ -1,6 +1,7 @@
 import React from 'react'
 import Details from "./Details";
 
+
 export default class Bid extends React.Component {
     constructor(props) {
         super(props);
@@ -13,8 +14,8 @@ export default class Bid extends React.Component {
     handleBidID = async (id) => {
         const auctionID = id;
 
-        const urlBid = `http://nackowskis.azurewebsites.net/api/Bud/2150/${auctionID}`;
-        const urlAuction = `http://nackowskis.azurewebsites.net/api/Auktion/2150/${auctionID}`;
+        const urlBid = `http://nackowskis.azurewebsites.net/api/bud/2150/${auctionID}`;
+        const urlAuction = `http://nackowskis.azurewebsites.net/api/auktion/2150/${auctionID}`;
 
         await fetch(urlBid)
             .then(response => response.json())
@@ -32,6 +33,32 @@ export default class Bid extends React.Component {
             );
     }
 
+    handlePostBid = (e, auctionID, bidPrice) => {
+        e.preventDefault();
+
+        // Hantera felaktig inmatning (validering)
+
+        const url = 'http://nackowskis.azurewebsites.net/api/bud/2150';
+        const bidData = {
+            "Summa": e.target.sum.value,
+            "Budgivare": e.target.bidder.value,
+            "AuktionID": auctionID
+        };
+
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(bidData),
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }
+        }).then((data) => {
+            console.log('Request success:', data);
+        })
+        alert('Ditt bud har sparats.');
+        window.location.reload();
+    }
+
     componentDidMount() {
         this.handleBidID(this.props.match.params.bid_id);
     }
@@ -39,7 +66,7 @@ export default class Bid extends React.Component {
     render() {
         return (
             <div>
-                <Details bids={this.state.bid} auctions={this.state.auction}/>
+                <Details bids={this.state.bid} auctions={this.state.auction} handlePostBid={this.handlePostBid} />
             </div>
         )
     }

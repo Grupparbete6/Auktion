@@ -1,30 +1,36 @@
 import React from 'react';
-import { Table, Collapse } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
+import NewBid from "./NewBid";
 
-export default function AuctionDetails(props) {
+export default function Details(props) {
+
+    const createBid = props.bids.length > 0 ? (
+        <NewBid handlePostBid={props.handlePostBid} auctionID={props.auctions.AuktionID} bidPrice={props.auctions.Utropspris} highestBid={props.bids.slice(-1)[0].Summa}/>
+    ) : (
+        <NewBid handlePostBid={props.handlePostBid} auctionID={props.auctions.AuktionID} bidPrice={props.auctions.Utropspris}/>
+    )
 
     return (
-        <Table striped bordered hover responsive variant="dark">
-            <thead>
-                <tr>
-                    <th>BudID</th>
-                    <th>AuktionID</th>
-                    <th>Budgivare</th>
-                    <th>Summa</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    props.bids.map(item => (
-                        <tr>
-                            <td>{item.BudID}</td>
-                            <td>{item.AuktionID}</td>
-                            <td>{item.Budgivare}</td>
-                            <td>{item.Summa}</td>
-                        </tr>
-                    ))
-                }
-            </tbody>
-        </Table>
+        <div>
+            {createBid}
+            <Table striped bordered hover responsive variant="dark">
+                <thead>
+                    <tr>
+                        <th>Budgivare</th>
+                        <th>Summa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        props.bids.map(item => (
+                            <tr key={item.BudID}>
+                                <td>{item.Budgivare}</td>
+                                <td>{item.Summa}</td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </Table>
+        </div>
     )
 }

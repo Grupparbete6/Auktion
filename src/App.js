@@ -2,7 +2,6 @@ import React from 'react';
 import Navigation from "./components/Navigation";
 import AuctionTable from './components/AuctionTable';
 import Details from "./components/Details";
-import Create from "./components/Create";
 import NewAuction from './components/NewAuction';
 import Bid from './components/Bid';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
@@ -14,9 +13,10 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       AuctionInfo: [],
+      Bid: undefined,
       IsLoaded: false,
       CurrentUser: 'Tom',
-      testAuction: undefined
+      SearchAuction: undefined
     }
   }
 
@@ -25,7 +25,7 @@ export default class App extends React.Component {
     const url = 'http://nackowskis.azurewebsites.net/api/auktion/2150';
     await fetch(url)
       .then(response => response.json())
-      .then(result => 
+      .then(result =>
         this.setState({
           AuctionInfo: result,
           IsLoaded: true
@@ -41,12 +41,12 @@ export default class App extends React.Component {
 
     const url = 'http://nackowskis.azurewebsites.net/api/Auktion/2150';
     const auktionData = {
-      "Titel": e.target.titel.value, 
-      "Beskrivning": e.target.description.value, 
-      "StartDatum": e.target.start_date.value, 
-      "SlutDatum": e.target.end_date.value, 
-      "Gruppkod": "2150", 
-      "Utropspris": e.target.start_bid.value, 
+      "Titel": e.target.titel.value,
+      "Beskrivning": e.target.description.value,
+      "StartDatum": e.target.start_date.value,
+      "SlutDatum": e.target.end_date.value,
+      "Gruppkod": "2150",
+      "Utropspris": e.target.start_bid.value,
       "SkapadAv": e.target.created_by.value
     };
 
@@ -76,23 +76,22 @@ export default class App extends React.Component {
     });
 
     this.setState({
-      testAuction: newData
+      SearchAuction: newData
     });
   }
 
   render() {
-    //console.log(this.onSearch);
-    const searchValue = this.state.testAuction !== undefined ? (
-      <Route exact path="/" render={(props) => <AuctionTable {...props} auctions={this.state.testAuction} />} />
+    const searchValue = this.state.SearchAuction !== undefined ? (
+      <Route exact path="/" render={(props) => <AuctionTable {...props} auctions={this.state.SearchAuction} search={true} />} />
     ) :
       (
-        <Route exact path="/" render={(props) => <AuctionTable {...props} auctions={this.state.AuctionInfo} />} />
+        <Route exact path="/" render={(props) => <AuctionTable {...props} auctions={this.state.AuctionInfo} search={false} />} />
       )
     return (
       <Router>
         <div className="App" >
           <Navigation onSearch={this.onSearch} />
-          <NewAuction postData={this.postData}/>
+          <NewAuction postData={this.postData} />
           {searchValue}
           <Route path="/:bid_id" component={Bid}></Route>
         </div>

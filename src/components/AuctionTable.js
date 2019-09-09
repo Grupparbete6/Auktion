@@ -4,14 +4,11 @@ import { Table, Collapse } from 'react-bootstrap';
 
 
 export default function AuctionTable(props) {
-    // const [toggle, setToggle] = useState(false);
-    // const filterByDate = props.auctions.filter(auktions => {
-    //     return Date.parse(auktions.SlutDatum) >= Date.now();
-    // })
 
-    // const useToggle = () => {
-    //     setToggle(!toggle);
-    // }
+    // Om search är true visar den all data (även de som gått ut) annars visas bara de som ej gått ut än.
+    const showOnlyPresentDate = props.auctions.filter(item => {
+        return props.search === true ? props.auctions : (Date.parse(item.SlutDatum) >= Date.now() ? (item) : null)
+    })
 
     return (
         <Table striped bordered hover responsive variant="dark">
@@ -28,17 +25,16 @@ export default function AuctionTable(props) {
             </thead>
             <tbody>
                 {
-                    props.auctions.map(item => (
+                    showOnlyPresentDate.map(item => (
                         <tr key={item.AuktionID}>
                             <td onClick={props.handleBidID}><Link to={'/' + item.AuktionID}>{item.AuktionID}</Link></td>
                             <td>{item.Titel}</td>
                             <td>{item.Beskrivning}</td>
-                            <td>{item.StartDatum.slice(0, 10)}</td>
-                            <td>{item.SlutDatum.slice(0, 10)}</td>
+                            <td>Datum: {item.StartDatum.slice(0, 10)} Tid: {item.StartDatum.slice(12, 16)}</td>
+                            <td>Datum: {item.SlutDatum.slice(0, 10)} Tid: {item.SlutDatum.slice(12, 16)}</td>
                             <td>{item.Utropspris}</td>
                             <td>{item.SkapadAv}</td>
-                        </tr>
-                    ))
+                        </tr>))
                 }
             </tbody>
         </Table>
