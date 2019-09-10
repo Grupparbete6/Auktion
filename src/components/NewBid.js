@@ -20,7 +20,7 @@ export default function Create(props) {
                     {highestBid}
                 </Modal.Header>
                     <Modal.Body>
-                        <Form onSubmit={(e) => {props.handlePostBid(e, props.auctionID, props.bidPrice)}}>
+                        <Form onSubmit={(e) => {props.handlePostBid(e, props.auctionID, props.bidPrice, props.highestBid)}}>
                             <Form.Row>
                                 <Form.Group as={Col} controlId="formGridEmail">
                                     <Form.Label>Summa</Form.Label>

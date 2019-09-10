@@ -33,7 +33,7 @@ export default class Bid extends React.Component {
             );
     }
 
-    handlePostBid = (e, auctionID, bidPrice) => {
+    handlePostBid = (e, auctionID, bidPrice, highestBid) => {
         e.preventDefault();
 
         // Hantera felaktig inmatning (validering)
@@ -45,6 +45,9 @@ export default class Bid extends React.Component {
             "AuktionID": auctionID
         };
 
+        if(e.target.sum.value > highestBid && e.target.bidder.value != "")
+        {
+
         fetch(url, {
             method: 'POST',
             body: JSON.stringify(bidData),
@@ -55,8 +58,20 @@ export default class Bid extends React.Component {
         }).then((data) => {
             console.log('Request success:', data);
         })
+
         alert('Ditt bud har sparats.');
         window.location.reload();
+        }
+        else if (e.target.sum.value < highestBid)
+        {
+            alert('Ditt bud är lägre än nuvarande bud.');
+            return;
+        }
+        else if (e.target.bidder.value == "")
+        {
+            alert('Namn på budgivare krävs.');
+            return;
+        }
     }
 
     componentDidMount() {
