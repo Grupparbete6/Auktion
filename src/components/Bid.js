@@ -45,7 +45,7 @@ export default class Bid extends React.Component {
             "AuktionID": auctionID
         };
 
-        if(e.target.sum.value > highestBid && e.target.bidder.value !== "")
+        if(e.target.sum.value > highestBid && e.target.bidder.value != "")
         {
 
         fetch(url, {
@@ -62,12 +62,12 @@ export default class Bid extends React.Component {
         alert('Ditt bud har sparats.');
         window.location.reload();
         }
-        else if (e.target.sum.value < highestBid || e.target.sum.value.length > 9)
+        else if (e.target.sum.value < highestBid)
         {
-            alert('Ditt bud har inte sparats pga något av följande fel:\nDitt bud är lägre än nuvarande bud.\nDitt bud är för stort.');
+            alert('Ditt bud är lägre än nuvarande bud.');
             return;
         }
-        else if (e.target.bidder.value === "")
+        else if (e.target.bidder.value == "")
         {
             alert('Namn på budgivare krävs.');
             return;
