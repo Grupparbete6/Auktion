@@ -45,7 +45,7 @@ export default class Bid extends React.Component {
             "AuktionID": auctionID
         };
 
-        if(e.target.sum.value > highestBid && e.target.bidder.value != "")
+        if(e.target.sum.value > highestBid && e.target.bidder.value !== "")
         {
 
         fetch(url, {
@@ -67,7 +67,7 @@ export default class Bid extends React.Component {
             alert('Ditt bud är lägre än nuvarande bud.');
             return;
         }
-        else if (e.target.bidder.value == "")
+        else if (e.target.bidder.value === "")
         {
             alert('Namn på budgivare krävs.');
             return;
