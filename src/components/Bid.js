@@ -29,14 +29,14 @@ export default class Bid extends React.Component {
             .then(result =>
                 this.setState({
                     auction: result
-                })
+                }),
             );
     }
 
     handlePostBid = (e, auctionID, bidPrice, highestBid) => {
         e.preventDefault();
 
-        // Hantera felaktig inmatning (validering)
+
 
         const url = 'http://nackowskis.azurewebsites.net/api/bud/2150';
         const bidData = {
@@ -45,41 +45,52 @@ export default class Bid extends React.Component {
             "AuktionID": auctionID
         };
 
-        if(e.target.sum.value > highestBid && e.target.bidder.value != "")
-        {
+        if (e.target.sum.value > highestBid && e.target.bidder.value != "") {
 
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(bidData),
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            }
-        }).then((data) => {
-            console.log('Request success:', data);
-        })
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(bidData),
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                }
+            }).then((data) => {
+                console.log('Request success:', data);
+            })
 
-        alert('Ditt bud har sparats.');
-        window.location.reload();
+            alert('Ditt bud har sparats.');
+            window.location.reload();
         }
-        else if (e.target.sum.value < highestBid)
-        {
+        else if (e.target.sum.value < highestBid) {
             alert('Ditt bud är lägre än nuvarande bud.');
             return;
         }
-        else if (e.target.bidder.value == "")
-        {
+        else if (e.target.bidder.value == "") {
             alert('Namn på budgivare krävs.');
             return;
         }
     }
 
-    componentDidMount() {
-        this.handleBidID(this.props.match.params.bid_id);
+    checkCompleted = () => {
+        var currentDate = Date.now()
+
+        if (Date.parse(this.state.auction.SlutDatum) < currentDate) {
+            var max = this.state.bid.reduce(function (current, prev) {
+                return (prev.SlutDatum > current.SlutDatum) ? prev : current
+             });
+             console.log("hej", max)
+        }
+    }
+
+    async componentDidMount() {
+        await this.handleBidID(this.props.match.params.bid_id);
     }
 
     render() {
-        this.state.bid.sort((a,b) => (a.Summa < b.Summa) ? 1 : ((b.Summa < a.Summa) ? -1 : 0));
+        this.state.bid.sort((a, b) => (a.Summa < b.Summa) ? 1 : ((b.Summa < a.Summa) ? -1 : 0))
+
+        this.checkCompleted()
+
         return (
             <div>
                 <Details bids={this.state.bid} auctions={this.state.auction} handlePostBid={this.handlePostBid} />
