@@ -78,7 +78,7 @@ export default class Bid extends React.Component {
             var max = this.state.bid.reduce(function (current, prev) {
                 return (prev.SlutDatum > current.SlutDatum) ? prev : current
              });
-             console.log("hej", max)
+             this.state.bid = max
         }
     }
 
