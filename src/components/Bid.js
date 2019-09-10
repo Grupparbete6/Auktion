@@ -79,7 +79,6 @@ export default class Bid extends React.Component {
     }
 
     render() {
-        this.state.bid.sort((a,b) => (a.Summa < b.Summa) ? 1 : ((b.Summa < a.Summa) ? -1 : 0));
         return (
             <div>
                 <Details bids={this.state.bid} auctions={this.state.auction} handlePostBid={this.handlePostBid} />
