@@ -77,8 +77,10 @@ export default class Bid extends React.Component {
         if (Date.parse(this.state.auction.SlutDatum) < currentDate) {
             var max = this.state.bid.reduce(function (current, prev) {
                 return (prev.SlutDatum > current.SlutDatum) ? prev : current
-             });
-             this.state.bid = max
+            });
+            console.log(max)
+
+            // TODO: setState.bid till max
         }
     }
 
@@ -87,6 +89,7 @@ export default class Bid extends React.Component {
     }
 
     render() {
+        if (this.state.bid.length > 1)
         this.state.bid.sort((a, b) => (a.Summa < b.Summa) ? 1 : ((b.Summa < a.Summa) ? -1 : 0))
 
         this.checkCompleted()
