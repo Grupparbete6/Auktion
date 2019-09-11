@@ -50,7 +50,7 @@ export default class App extends React.Component {
     const auktionData = {
       "Titel": e.target.titel.value,
       "Beskrivning": e.target.description.value,
-      "StartDatum": e.target.start_date.value,
+      "StartDatum": today,
       "SlutDatum": e.target.end_date.value,
       "Gruppkod": "2150",
       "Utropspris": e.target.start_bid.value,
@@ -68,6 +68,9 @@ export default class App extends React.Component {
       }).then((data) => {
       console.log('Request success:');
       })
+
+      alert('Din auktion har sparats.');
+            window.location.reload();
     }
     else if (e.target.start_bid.value.length > 9)
     {
