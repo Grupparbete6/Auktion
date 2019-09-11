@@ -79,7 +79,7 @@ export default class Bid extends React.Component {
             var max = this.state.bid.reduce(function (current, prev) {
                 return (prev.SlutDatum > current.SlutDatum) ? prev : current
             });
-            max.push(max)
+            maxArray.push(max)
 
             this.setState({
                 bid: maxArray
