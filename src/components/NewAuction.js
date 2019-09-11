@@ -7,6 +7,10 @@ export default function NewAuction(props) {
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
+    var currentDate = new Date();
+    var currentDateString = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}` +
+    ` ${currentDate.getHours()}:00`
+
     return (
         <div>
             <Button className="float-right" variant="outline-info" onClick={handleShow}>Ny auktion</Button>
@@ -24,7 +28,7 @@ export default function NewAuction(props) {
                         </Form.Group>
                         <Form.Group controlId="formStartDate">
                             <Form.Label>Start datum</Form.Label>
-                            <Form.Control name="start_date" type="text" placeholder="Start datum" />
+                            <Form.Control name="start_date" type="text" placeholder="Start datum" value={currentDateString} readOnly />
                         </Form.Group>
                         <Form.Group controlId="formEndDate">
                             <Form.Label>Slut datum</Form.Label>
