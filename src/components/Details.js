@@ -5,7 +5,7 @@ import NewBid from "./NewBid";
 export default function Details(props) {
 
     const createBid = props.bids.length > 0 ? (
-        <NewBid handlePostBid={props.handlePostBid} auctionID={props.auctions.AuktionID} bidPrice={props.auctions.Utropspris} highestBid={props.bids.slice(-1)[0].Summa}/>
+        <NewBid handlePostBid={props.handlePostBid} auctionID={props.auctions.AuktionID} bidPrice={props.auctions.Utropspris} highestBid={props.bids.slice(0)[0].Summa}/>
     ) : (
         <NewBid handlePostBid={props.handlePostBid} auctionID={props.auctions.AuktionID} bidPrice={props.auctions.Utropspris}/>
     )
