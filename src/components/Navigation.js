@@ -8,7 +8,6 @@ export default function Navigation(props) {
                 <Navbar.Brand href="/">Ironforge</Navbar.Brand>
                 <Nav className="mr-auto">
                     <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/skapa">Skapa bud</Nav.Link>
                 </Nav>
                 <Form inline onSubmit={props.onSearch}>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2" name="search"/>
