@@ -50,7 +50,7 @@ export default class App extends React.Component {
     const auktionData = {
       "Titel": e.target.titel.value,
       "Beskrivning": e.target.description.value,
-      "StartDatum": today,
+      "StartDatum": e.target.start_date.value,
       "SlutDatum": e.target.end_date.value,
       "Gruppkod": "2150",
       "Utropspris": e.target.start_bid.value,
