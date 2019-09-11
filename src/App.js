@@ -37,6 +37,13 @@ export default class App extends React.Component {
   postData = (e) => {
     e.preventDefault();
 
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+    
     // Hantera felaktig inmatning (validering)
 
     const url = 'http://nackowskis.azurewebsites.net/api/Auktion/2150';
@@ -49,17 +56,27 @@ export default class App extends React.Component {
       "Utropspris": e.target.start_bid.value,
       "SkapadAv": e.target.created_by.value
     };
-
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(auktionData),
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      }
-    }).then((data) => {
+    if(e.target.start_bid.value.length < 9 && e.target.created_by.value !== '')
+    {
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(auktionData),
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        }
+      }).then((data) => {
       console.log('Request success:');
-    })
+      })
+    }
+    else if (e.target.start_bid.value.length > 9)
+    {
+      alert('Ditt utgångspris är för stort.');
+    }
+    else if (e.target.created_by.value === '')
+    {
+      alert('Namn på skapare måste anges.');
+    }
   }
 
   componentDidMount() {
@@ -81,6 +98,7 @@ export default class App extends React.Component {
   }
 
   render() {
+
     const searchValue = this.state.SearchAuction !== undefined ? (
       <Route exact path="/" render={(props) => <AuctionTable {...props} auctions={this.state.SearchAuction} search={true} />} />
     ) :
