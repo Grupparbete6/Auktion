@@ -32,7 +32,7 @@ export default function NewAuction(props) {
                         </Form.Group>
                         <Form.Group controlId="formEndDate">
                             <Form.Label>Slut datum</Form.Label>
-                            <Form.Control name="end_date" type="text" placeholder="Slut datum" />
+                            <Form.Control name="end_date" type="datetime-local" placeholder="Slut datum" />
                         </Form.Group>
                         <Form.Group controlId="formStarBid">
                             <Form.Label>Utropspris</Form.Label>
